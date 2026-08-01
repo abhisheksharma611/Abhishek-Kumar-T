@@ -14,7 +14,7 @@ const firaCode = Fira_Code({
   display: "swap",
 });
 
-const siteUrl = "https://abhishekkumart.dev";
+const siteUrl = "https://abhishek-kumar-t.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
