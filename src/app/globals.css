@@ -1,0 +1,424 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-terminal: #2d2d2d;
+  --color-surface: #353535;
+  --color-card: #383838;
+  --color-border: #444444;
+  --color-accent: #e85f24; /* WCAG AA 4.84:1 on dark (was #e65320 = 4.46:1) */
+  --color-accent-dim: #cc5529;
+  --color-muted: #9ca3af;
+  --color-green: #22c55e;
+  --color-cyan: #06b6d4;
+  --font-mono: var(--font-fira-next), "Fira Code", "Cascadia Code", "JetBrains Mono", monospace;
+  --font-sans: var(--font-inter-next), "Inter", "SF Pro", system-ui, sans-serif;
+  --color-code-bg: #353535;
+  --color-gray-500: #8b949e; /* WCAG AA ≥4.5:1 on #2d2d2d (was #6b7280 = 2.85:1) */
+
+  /* Globe responsive scaling */
+  --globe-icon-base: clamp(1.35rem, 4vw, 2.5rem);
+  --globe-icon-hover: calc(var(--globe-icon-base) * 2.2);
+  --globe-label-size: clamp(0.5rem, 1.8vw, 0.8rem);
+  --globe-icon-gap: clamp(0.6rem, 1.5vw, 1.2rem);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #444 transparent;
+}
+
+body {
+  background: #2d2d2d;
+  color: #e6edf3;
+  font-family: var(--font-sans);
+  position: relative;
+  will-change: scroll-position;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(230, 83, 32, 0.06), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  will-change: transform;
+}
+
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(255, 92, 51, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 92, 51, 0.12) 1px, transparent 1px);
+  background-size: 60px 60px;
+  will-change: transform;
+  contain: paint;
+}
+
+.section-title {
+  color: #e6edf3;
+  font-family: "Fira Code", var(--font-mono);
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 36px;
+  margin-bottom: 4rem;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #e85f24, #c0392b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 5px rgba(230, 83, 32, 0.3); }
+  50% { box-shadow: 0 0 20px rgba(230, 83, 32, 0.6); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes ping {
+  75%, 100% { transform: scale(2); opacity: 0; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spin-slow-reverse {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+.animate-blink {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes typingGlow {
+  0%, 100% { text-shadow: 0 0 2px rgba(255,107,53,0.1); }
+  50% { text-shadow: 0 0 8px rgba(255,107,53,0.25); }
+}
+
+.typing-active {
+  animation: typingGlow 2s ease-in-out infinite;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.6s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animate-ping {
+  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+.animate-spin-slow-reverse {
+  animation: spin-slow-reverse 3s linear infinite;
+}
+
+.section-hidden {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease-out;
+}
+
+.section-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================
+   PHASE 1: FLUID TYPOGRAPHY & SPACING SYSTEM
+   ============================================ */
+
+@theme inline {
+  /* Fluid Typography Scale using clamp() */
+  --text-xs: clamp(0.7rem, 0.65rem + 0.25vw, 0.8rem);
+  --text-sm: clamp(0.8rem, 0.75rem + 0.25vw, 0.9rem);
+  --text-base: clamp(0.95rem, 0.9rem + 0.25vw, 1.05rem);
+  --text-lg: clamp(1.1rem, 1rem + 0.5vw, 1.25rem);
+  --text-xl: clamp(1.3rem, 1.15rem + 0.75vw, 1.5rem);
+  --text-2xl: clamp(1.6rem, 1.35rem + 1.25vw, 2rem);
+  --text-3xl: clamp(2rem, 1.6rem + 2vw, 2.5rem);
+  --text-4xl: clamp(2.5rem, 1.8rem + 3.5vw, 3.5rem);
+  --text-5xl: clamp(3rem, 2rem + 5vw, 4.5rem);
+  --text-6xl: clamp(3.5rem, 2.2rem + 6.5vw, 5.5rem);
+  --text-7xl: clamp(4rem, 2.5rem + 7.5vw, 6.5rem);
+
+  /* Fluid Spacing Scale */
+  --space-1: clamp(0.25rem, 0.2rem + 0.25vw, 0.35rem);
+  --space-2: clamp(0.5rem, 0.4rem + 0.5vw, 0.75rem);
+  --space-3: clamp(0.75rem, 0.6rem + 0.75vw, 1rem);
+  --space-4: clamp(1rem, 0.8rem + 1vw, 1.5rem);
+  --space-5: clamp(1.25rem, 1rem + 1.25vw, 1.75rem);
+  --space-6: clamp(1.5rem, 1.2rem + 1.5vw, 2rem);
+  --space-8: clamp(2rem, 1.5rem + 2.5vw, 3rem);
+  --space-10: clamp(2.5rem, 1.8rem + 3.5vw, 4rem);
+  --space-12: clamp(3rem, 2rem + 5vw, 5rem);
+  --space-16: clamp(4rem, 2.5rem + 7.5vw, 6rem);
+  --space-20: clamp(5rem, 3rem + 10vw, 8rem);
+  --space-24: clamp(6rem, 3.5rem + 12.5vw, 10rem);
+
+  /* Section padding fluid */
+  --section-py: clamp(4rem, 3rem + 5vw, 8rem);
+  --section-py-lg: clamp(6rem, 4rem + 10vw, 12rem);
+  --container-px: clamp(1rem, 0.8rem + 1vw, 2rem);
+  --container-px-lg: clamp(1.5rem, 1rem + 2.5vw, 3rem);
+}
+
+/* ============================================
+   GLOBAL SAFETY STYLES
+   ============================================ */
+
+/* Prevent horizontal overflow globally */
+html,
+body,
+#__next {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Contain paint + skip rendering for sections until near the viewport.
+   The hero is always visible; every section below it gets content-visibility:
+   auto so below-fold layout/paint work is deferred (Lighthouse win). */
+section[id]:not(#hero) {
+  contain: paint;
+  content-visibility: auto;
+}
+
+/* contain-intrinsic-size is the *content-box* height used while a section is
+   off-screen and not rendered — the section's total height is this value plus
+   its vertical padding (py-20 = 10rem). It must be close to the real rendered
+   height, otherwise nav scroll targets computed from the estimated layout
+   overshoot or undershoot. Values below are content-box = measured total
+   height minus 10rem padding (1440x900 viewport):
+     min-h-screen sections: total 100vh -> content calc(100vh - 10rem)
+     education:   945px total -> 49rem
+     experience:  913px total -> 47rem
+     certifications: 599px total -> 27.5rem
+     projects:    637px total -> 30rem
+   The `auto` keyword remembers the last rendered size once a section has
+   actually painted, so the estimate self-corrects after first scroll. */
+section#about,
+section#skills,
+section#contact {
+  contain-intrinsic-size: auto calc(100vh - 10rem);
+}
+section#education,
+section#experience {
+  contain-intrinsic-size: auto 49rem;
+}
+section#experience {
+  contain-intrinsic-size: auto 47rem;
+}
+section#certifications {
+  contain-intrinsic-size: auto 27.5rem;
+}
+section#projects {
+  contain-intrinsic-size: auto 30rem;
+}
+
+/* Respect reduced motion globally */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Touch-friendly minimums (44x44px) */
+button,
+a,
+input,
+textarea,
+select,
+[role="button"],
+[tabindex="0"] {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Hide scrollbar but keep functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Touch manipulation for better mobile UX */
+.touch-manipulation {
+  touch-action: manipulation;
+}
+
+/* Focus visible for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Selection colors */
+::selection {
+  background: rgba(230, 83, 32, 0.3);
+  color: #fff;
+}
+
+
+
+/* ============================================
+   UTILITY CLASSES FOR FLUID VALUES
+   ============================================ */
+
+.text-fluid-xs { font-size: var(--text-xs); }
+.text-fluid-sm { font-size: var(--text-sm); }
+.text-fluid-base { font-size: var(--text-base); }
+.text-fluid-lg { font-size: var(--text-lg); }
+.text-fluid-xl { font-size: var(--text-xl); }
+.text-fluid-2xl { font-size: var(--text-2xl); }
+.text-fluid-3xl { font-size: var(--text-3xl); }
+.text-fluid-4xl { font-size: var(--text-4xl); }
+.text-fluid-5xl { font-size: var(--text-5xl); }
+.text-fluid-6xl { font-size: var(--text-6xl); }
+.text-fluid-7xl { font-size: var(--text-7xl); }
+
+.p-fluid-1 { padding: var(--space-1); }
+.p-fluid-2 { padding: var(--space-2); }
+.p-fluid-3 { padding: var(--space-3); }
+.p-fluid-4 { padding: var(--space-4); }
+.p-fluid-5 { padding: var(--space-5); }
+.p-fluid-6 { padding: var(--space-6); }
+.p-fluid-8 { padding: var(--space-8); }
+.p-fluid-10 { padding: var(--space-10); }
+.p-fluid-12 { padding: var(--space-12); }
+.p-fluid-16 { padding: var(--space-16); }
+.p-fluid-20 { padding: var(--space-20); }
+.p-fluid-24 { padding: var(--space-24); }
+
+.py-fluid-section { padding-top: var(--section-py); padding-bottom: var(--section-py); }
+.py-fluid-section-lg { padding-top: var(--section-py-lg); padding-bottom: var(--section-py-lg); }
+.px-fluid-container { padding-left: var(--container-px); padding-right: var(--container-px); }
+.px-fluid-container-lg { padding-left: var(--container-px-lg); padding-right: var(--container-px-lg); }
+
+.mx-auto-fluid { margin-left: auto; margin-right: auto; }
+.max-w-fluid { max-width: 80rem; } /* 1280px */
+.max-w-fluid-lg { max-width: 90rem; } /* 1440px */
+
+/* Grid utilities for consistent sections */
+.grid-sections {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+@media (min-width: 640px) {
+  .grid-sections {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+}
+@media (min-width: 1024px) {
+  .grid-sections {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-6);
+  }
+}
+
+.grid-sections-2 {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+@media (min-width: 768px) {
+  .grid-sections-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+}
+
+/* ============================================
+   PHASE 2: SIDEBAR RESPONSIVE UTILITIES
+   ============================================ */
+
+/* Safe area insets */
+.pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+.pl-safe { padding-left: env(safe-area-inset-left); }
+.pr-safe { padding-right: env(safe-area-inset-right); }
+.pt-safe { padding-top: env(safe-area-inset-top); }
+
+/* Scrollbar hide */
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+
+/* Touch manipulation */
+.touch-manipulation { touch-action: manipulation; }
+
+/* Reduced motion for sidebar transitions */
+@media (prefers-reduced-motion: reduce) {
+  .sidebar-transition { transition: none !important; }
+}
+
+/* Gradient fade mask fallback for browsers without mask-image support */
+@supports not (mask-image: linear-gradient(to right, transparent, black)) {
+  .fade-mask-left::before,
+  .fade-mask-right::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 48px;
+    pointer-events: none;
+    z-index: 10;
+  }
+  .fade-mask-left::before {
+    left: 0;
+    background: linear-gradient(to right, var(--color-terminal), transparent);
+  }
+  .fade-mask-right::after {
+    right: 0;
+    background: linear-gradient(to left, var(--color-terminal), transparent);
+  }
+}
