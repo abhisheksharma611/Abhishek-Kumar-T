@@ -1,4 +1,4 @@
-# 👨‍💻 Abhishek Kumar T
+﻿# 👨‍💻 Abhishek Kumar T
 
 ### Full-Stack Developer · React & Next.js
 
@@ -79,3 +79,7 @@ Deployed on **Vercel** with auto CI/CD — push to `main` and it goes live autom
 [![Email](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:abhishek8123416980@gmail.com)
 
 Made with ❤️ by Abhishek Kumar T · MIT License
+
+## Contributions
+
+This portfolio repo is actively maintained. PRs and suggestions are welcome.
